@@ -1,40 +1,33 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import plotly.express as px
+import plotly.graph_objs as go
+import pandas as pd
+import numpy as np
 
 app = dash.Dash()
-colors = {"background": "gray", "text": "white"}
+
+data = pd.read_excel("data.xls")
+
 app.layout = html.Div(
-    style={"backgroundColor": colors["background"]},
-    children=[
-        html.H1(
-            children="Dash", style={"textAlign": "center", "color": colors["text"]},
-        ),
-        html.Div(
-            children="Dash for Python.",
-            style={"textAlign": "center", "color": colors["text"]},
-        ),
+    [
         dcc.Graph(
-            id="Graph1",
+            id="Dash Chart",
             figure={
                 "data": [
-                    {"x": [1, 2, 3], "y": [4, 1, 2], "type": "bar", "name": "SF"},
-                    {
-                        "x": [1, 2, 3],
-                        "y": [2, 4, 5],
-                        "type": "bar",
-                        "name": u"Montréal",
-                    },
-                    {"x": [1, 2, 3], "y": [10, 7, 9], "type": "bar", "name": u"Cairo",},
+                    go.Scatter(
+                        x=data["country"], y=data["life expectancy"], mode="markers"
+                    )
                 ],
-                "layout": {
-                    "plot_bgcolor": colors["background"],
-                    "paper_bgcolor": colors["background"],
-                    "font": {"color": colors["text"]},
-                },
+                "layout": go.Layout(
+                    xaxis={"title": "country"},
+                    yaxis={"title": "life expectancy"},
+                    hovermode="closest",
+                ),
             },
-        ),
-    ],
+        )
+    ]
 )
 
 if __name__ == "__main__":
